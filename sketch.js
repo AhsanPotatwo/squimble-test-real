@@ -15,7 +15,7 @@ function setup() {
   camera = new Camera();
 
   // Spawn player in world space
-   entities.push(new Player("Dude_awesome", 0, 0, 20, 30, 5));
+   entities.push(new Player("Dude_even_more_awesome", 0, 0, 20, 30, 5));
 
      let stageBlocks = makeStage1(); // or makeStage2(), etc.
   for (let block of stageBlocks) {
