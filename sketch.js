@@ -3,7 +3,7 @@ let entities = [];
 let worldWidth = 2000;
 let worldHeight = 2000;
 
-let camera;
+
 
 let showDebug = false;
 let showDebugText = false;
@@ -12,56 +12,54 @@ function setup() {
   createCanvas(800, 600);
   rectMode(CENTER);
 
-  camera = new Camera();
-
   // Spawn player in world space
-   entities.push(new Player("Dude_the_best", 0, 0, 20, 30, 5));
+  entities.push(new Player("Dude", 0, 0, 20, 30, 5));
 
-     let stageBlocks = makeStage1(); // or makeStage2(), etc.
+  let stageBlocks = makeStage1();
   for (let block of stageBlocks) {
     entities.push(block);
   }
-
 }
 
 function draw() {
   background(220);
 
   updateEntities();
-  updateCamera();
+
+  // Use the first player's camera for now
+  const player = entities[0];
+  const camera = player.camera;
 
   push();
-  applyCameraTransform();
-  drawWorld();
-  drawEntities();
+  applyCameraTransform(camera);
+  drawWorld(camera);
+  drawEntities(camera);
   pop();
 
-  drawDebugConsole();
+  drawDebugConsole(camera);
 }
 
+//this is all for debugging, real players won't be able to access this
 function keyPressed() {
-  // Toggle debug info with the backtick (`) key
   if (key == '1') {
     showDebug = !showDebug;
   }
-   if (key == '2') {
+  if (key == '2') {
     showDebugText = !showDebugText;
   }
+  // Use first player's camera for zoom controls
+  const camera = entities[0].camera;
   if (key == "q") {
     camera.zoomIn();
   }
-
   if (key == "e") {
     camera.zoomOut();
   }
-  
 }
 
 function updateEntities() {
-  const cameraX = camera.getX();
-  const cameraY = camera.getY();
   for (let entity of entities) {
-    if (entity.update) entity.update(cameraX, cameraY, entities);
+    if (entity.update) entity.update(entity.camera ? entity.camera.getX() : 0, entity.camera ? entity.camera.getY() : 0, entities);
   }
 }
 
@@ -70,7 +68,7 @@ function updateCamera() {
   camera.follow(player.worldX, player.worldY);
 }
 
-function applyCameraTransform() {
+function applyCameraTransform(camera) {
   const cameraX = camera.getX();
   const cameraY = camera.getY();
   const zoom = camera.getZoom();
@@ -80,12 +78,10 @@ function applyCameraTransform() {
 }
 
 function drawWorld() {
-  const cameraX = camera.getX();
-  const cameraY = camera.getY();
-  //stage(cameraX, cameraY);
+
 }
 
-function drawEntities() {
+function drawEntities(camera) {
   const cameraX = camera.getX();
   const cameraY = camera.getY();
   for (let entity of entities) {
@@ -93,17 +89,16 @@ function drawEntities() {
   }
 }
 
-function drawDebugConsole() {
+function drawDebugConsole(camera) {
   if (!showDebug) return;
 
   const player = entities[0];
   const cameraX = camera.getX();
   const cameraY = camera.getY();
 
-  // Calculate world mouse position
   const zoom = camera.getZoom();
   const worldMouseX = (mouseX - width / 2) / zoom + cameraX;
-  const worldMouseY = -( (mouseY - height / 2) / zoom - cameraY );
+  const worldMouseY = -((mouseY - height / 2) / zoom - cameraY);
 
   drawDebugGrid(cameraX, cameraY, zoom);
 
@@ -116,7 +111,7 @@ function drawDebugConsole() {
   fill(255);
   textSize(14);
   textAlign(LEFT, TOP);
-  let debugText = 
+  let debugText =
     `Player X: ${player.worldX.toFixed(2)}\n` +
     `Player Y: ${player.worldY.toFixed(2)}\n` +
     `Camera X: ${cameraX.toFixed(2)}\n` +
