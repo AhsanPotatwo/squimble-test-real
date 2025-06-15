@@ -38,3 +38,27 @@ class WorldBlock extends Entity {
     pop();
   }
 }
+
+
+class DecorativeBlock extends Entity {
+  constructor(worldX, worldY, width, height, type = "grass") {
+    super(worldX, worldY, width, height, false);
+    this.type = type;
+  }
+
+  render(cameraX, cameraY) {
+    let x = this.worldX;
+    let y = -this.worldY;
+    const tileDef = DECORATIVE_TILE_TYPES[this.type] || DECORATIVE_TILE_TYPES["grass"];
+    push();
+    noStroke();
+    rectMode(CENTER);
+    if (tileDef.image) {
+      image(tileDef.image, x - this.width/2, y - this.height/2, this.width, this.height);
+    } else {
+      fill(...tileDef.color);
+      rect(x, y, this.width, this.height);
+    }
+    pop();
+  }
+}

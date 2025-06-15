@@ -1,4 +1,5 @@
 let entities = [];
+let decorativeBlocks = [];
 
 let worldWidth = 2000;
 let worldHeight = 2000;
@@ -8,16 +9,26 @@ let worldHeight = 2000;
 let showDebug = false;
 let showDebugText = false;
 
+
+
 function setup() {
   createCanvas(800, 600);
   rectMode(CENTER);
 
+  // Clear arrays in case of reload
+  decorativeBlocks = [];
+  entities = [];
+
   // Spawn player in world space
   entities.push(new Player("Dude", 0, 0, 20, 30, 5));
 
-  let stageBlocks = makeStage1();
-  for (let block of stageBlocks) {
+  // Get stage data
+  const stageData = makeStage1();
+  for (let block of stageData.world) {
     entities.push(block);
+  }
+  for (let deco of stageData.decorative) {
+    decorativeBlocks.push(deco);
   }
 }
 
@@ -26,14 +37,14 @@ function draw() {
 
   updateEntities();
 
-  // Use the first player's camera for now
   const player = entities[0];
   const camera = player.camera;
 
   push();
   applyCameraTransform(camera);
-  drawWorld(camera);
-  drawEntities(camera);
+  drawDecorativeBlocks(camera); // Draw grass/decorative blocks first
+  drawWorld(camera);            // Draw world blocks (walls, etc.)
+  drawEntities(camera);         // Draw player, enemies, etc.
   pop();
 
   drawDebugConsole(camera);
@@ -189,4 +200,12 @@ function drawDebugGrid(cameraX, cameraY, zoom) {
   }
 
   pop();
+}
+
+function drawDecorativeBlocks(camera) {
+  const cameraX = camera.getX();
+  const cameraY = camera.getY();
+  for (let block of decorativeBlocks) {
+    block.render(cameraX, cameraY);
+  }
 }
