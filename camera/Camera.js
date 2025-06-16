@@ -26,3 +26,11 @@ class Camera {
     this.zoom = constrain(this.zoom - this.zoomSpeed, this.minZoom, this.maxZoom);
   }
 }
+
+function updateEditorCamera() {
+  const speed = 20;
+  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) editorCamera.x -= speed; // A or Left
+  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) editorCamera.x += speed; // D or Right
+  if (keyIsDown(UP_ARROW) || keyIsDown(87)) editorCamera.y += speed; // W or Up (Y+ is up in world)
+  if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) editorCamera.y -= speed; // S or Down
+}

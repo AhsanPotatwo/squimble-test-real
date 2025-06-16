@@ -4,12 +4,11 @@ let decorativeBlocks = [];
 let worldWidth = 2000;
 let worldHeight = 2000;
 
-
-
 let showDebug = false;
 let showDebugText = false;
 
-
+let editorMode = false;
+let editorCamera;
 
 function setup() {
   createCanvas(800, 600);
@@ -35,19 +34,28 @@ function setup() {
 function draw() {
   background(220);
 
-  updateEntities();
-
-  const player = entities[0];
-  const camera = player.camera;
-
-  push();
-  applyCameraTransform(camera);
-  drawDecorativeBlocks(camera); // Draw grass/decorative blocks first
-  drawWorld(camera);            // Draw world blocks (walls, etc.)
-  drawEntities(camera);         // Draw player, enemies, etc.
-  pop();
-
-  drawDebugConsole(camera);
+  if (editorMode) {
+    updateEditorCamera();
+    push();
+    applyCameraTransform(editorCamera);
+    drawDecorativeBlocks(editorCamera);
+    drawWorld(editorCamera);
+    drawEntities(editorCamera);
+    // Optionally: draw editor UI here
+    pop();
+    drawEditorUI(); // Optional: overlay for editor controls
+  } else {
+    updateEntities();
+    const player = entities[0];
+    const camera = player.camera;
+    push();
+    applyCameraTransform(camera);
+    drawDecorativeBlocks(camera);
+    drawWorld(camera);
+    drawEntities(camera);
+    pop();
+    drawDebugConsole(camera);
+  }
 }
 
 //this is all for debugging, real players won't be able to access this
@@ -65,6 +73,13 @@ function keyPressed() {
   }
   if (key == "e") {
     camera.zoomOut();
+  }
+
+  if (key === 'F2') {
+    editorMode = !editorMode;
+    if (editorMode && !editorCamera) {
+      editorCamera = new Camera(0, 0); // Start at world center
+    }
   }
 }
 
@@ -208,4 +223,15 @@ function drawDecorativeBlocks(camera) {
   for (let block of decorativeBlocks) {
     block.render(cameraX, cameraY);
   }
+}
+
+function drawEditorUI() {
+  push();
+  fill(0, 180);
+  rect(10, 10, 430, 50, 8);
+  fill(255);
+  textSize(16);
+  textAlign(LEFT, TOP);
+  text("EDITOR MODE (F2 to exit)", 10, 10);
+  pop();
 }
