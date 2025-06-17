@@ -225,13 +225,3 @@ function drawDecorativeBlocks(camera) {
   }
 }
 
-function drawEditorUI() {
-  push();
-  fill(0, 180);
-  rect(10, 10, 430, 50, 8);
-  fill(255);
-  textSize(16);
-  textAlign(LEFT, TOP);
-  text("EDITOR MODE (F2 to exit)", 10, 10);
-  pop();
-}
