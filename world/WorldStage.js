@@ -10,25 +10,34 @@ function drawWorldRect(worldX, worldY, size) {
   rect(worldX, -worldY, size); // direct world coordinates
 }
 
-const DECORATIVE_TILE_TYPES = {
-  grass: { color: [100, 200, 100], image: null },
-  dirt:  { color: [160, 110, 60],  image: null },
-  water: { color: [80, 120, 255],  image: null },
-  sand:  { color: [230, 220, 120], image: null },
-  stone: { color: [180, 180, 180], image: null },
-  void:  { color: [0, 0, 0],       image: null },
-  // Add more as needed!
+const TILESETS = {
+  grass: [
+    { name: "Grass 1", color: [100, 200, 100] },
+    { name: "Grass 2", color: [80, 180, 80] },
+    { name: "Grass Path", color: [120, 220, 120] }
+  ],
+  dirt: [
+    { name: "Dirt 1", color: [160, 110, 60] },
+    { name: "Dirt Path", color: [180, 130, 80] }
+  ],
+  water: [
+    { name: "Water 1", color: [80, 120, 255] },
+    { name: "Water 2", color: [80, 0, 255] },
+  ]
+  // Add more categories and variants as needed
 };
 
 function makeStage1() {
   const decorativeBlocksData = [
-    { x: 0, y: 0, type: "grass" },
-    { x: 50, y: 0, type: "dirt" },
-    { x: 100, y: 0, type: "water" },
-    { x: 150, y: 0, type: "void" },
+    { x: 0, y: 0, category: "grass", variant: 0 }, // Grass 1
+    { x: 50, y: 0, category: "grass", variant: 1 }, // Grass 2
+    { x: 100, y: 0, category: "grass", variant: 2 }, // Grass Path
+    { x: 0, y: 50, category: "dirt", variant: 0 }, // Dirt 1
+    { x: 50, y: 50, category: "dirt", variant: 1 }, // Dirt Path
+    { x: 100, y: 50, category: "water", variant: 0 } // Water 1
   ];
   const decorative = decorativeBlocksData.map(
-    d => new DecorativeBlock(d.x, d.y, 50, 50, d.type)
+    d => new DecorativeBlock(d.x, d.y, 50, 50, d.category, d.variant)
   );
 
   const worldBlocksData = [
