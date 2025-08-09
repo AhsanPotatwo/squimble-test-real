@@ -9,13 +9,13 @@ class Player extends Entity {
     this.acceleration = 0.6;
     this.friction = 0.85;
     this.maxSpeed = playerSpeed * 2;
-    this.camera = new Camera(worldX, worldY); // Each player gets their own camera
+    this.camera = new Camera(worldX, worldY);
   }
 
   update(cameraX, cameraY) {
     this.move();
     this.physicsUpdate(entities);
-    this.camera.follow(this.worldX, this.worldY); // Camera follows this player
+    this.camera.follow(this.worldX, this.worldY);
   }
 
   render(cameraX, cameraY) {

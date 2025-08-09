@@ -8,7 +8,7 @@ class Entity {
     this.collidable = collidable;
   }
 
-  // Override in subclasses if needed
+  // Note to self: Override in subclasses if needed
   update(cameraX, cameraY) {}
 
   // Axis-aligned bounding box collision for rectangles
@@ -33,7 +33,7 @@ class WorldBlock extends Entity {
     push();
     noStroke();
     rectMode(CENTER);
-    fill(200, 50, 50); // Example color for blocks
+    fill(200, 50, 50);
     rect(x, y, this.width + 0, this.height + 0);
     pop();
   }

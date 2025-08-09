@@ -7,24 +7,38 @@ function stage(cameraX, cameraY) {
 
 // Helper to draw a world object relative to the camera
 function drawWorldRect(worldX, worldY, size) {
-  rect(worldX, -worldY, size); // direct world coordinates
+  rect(worldX, -worldY, size); // direct world coordinates - REMEMBER THIS!
 }
 
 const TILESETS = {
   grass: [
     { name: "Grass 1", color: [100, 200, 100] },
     { name: "Grass 2", color: [80, 180, 80] },
-    { name: "Grass Path", color: [120, 220, 120] }
+    { name: "Grass Path", color: [120, 220, 120] },
   ],
+
   dirt: [
     { name: "Dirt 1", color: [160, 110, 60] },
-    { name: "Dirt Path", color: [180, 130, 80] }
+    { name: "Dirt Path", color: [180, 130, 80] },
   ],
+
   water: [
     { name: "Water 1", color: [80, 120, 255] },
     { name: "Water 2", color: [80, 0, 255] },
-  ]
-  // Add more categories and variants as needed
+  ],
+
+  stone: [
+    { name: "Stone 1", color: [150, 150, 150] },
+    { name: "Stone 2", color: [130, 130, 130] },
+    { name: "Stone Path", color: [170, 170, 170] }
+  ],
+
+  sand: [
+    { name: "Sand 1", color: [210, 180, 140] },
+    { name: "Sand Path", color: [220, 200, 160] },
+  ],
+
+  // I can add more categories and variants as needed!!
 };
 
 function makeStage1() {

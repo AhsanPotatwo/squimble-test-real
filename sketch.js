@@ -14,14 +14,13 @@ function setup() {
   createCanvas(800, 600);
   rectMode(CENTER);
 
-  // Clear arrays in case of reload
   decorativeBlocks = [];
   entities = [];
 
-  // Spawn player in world space
+  // Spawn player in world space, I'll put it as 0,0 for now!!
   entities.push(new Player("Dude", 0, 0, 20, 30, 5));
 
-  // Get stage data
+  // Get stage/world data
   const stageData = makeStage1();
   for (let block of stageData.world) {
     entities.push(block);
@@ -36,14 +35,14 @@ function draw() {
 
   if (editorMode) {
     updateEditorCamera();
+    updateEditorButtonHover(mouseX, mouseY);
     push();
     applyCameraTransform(editorCamera);
     drawDecorativeBlocks(editorCamera);
     drawWorld(editorCamera);
     drawEntities(editorCamera);
-    // Optionally: draw editor UI here
     pop();
-    drawEditorUI(); // Optional: overlay for editor controls
+    drawEditorUI();
   } else {
     updateEntities();
     const player = entities[0];
@@ -58,7 +57,7 @@ function draw() {
   }
 }
 
-//this is all for debugging, real players won't be able to access this
+//this is all for debugging, real players won't be able to access this of course
 function keyPressed() {
   if (key == '1') {
     showDebug = !showDebug;
@@ -76,11 +75,25 @@ function keyPressed() {
   }
 
   if (key === 'F2') {
-    editorMode = !editorMode;
-    if (editorMode && !editorCamera) {
-      editorCamera = new Camera(0, 0); // Start at world center
-    }
+  editorMode = !editorMode;
+  if (editorMode && !editorCamera) {
+    editorCamera = new Camera(0, 0);
   }
+  if (editorMode) {
+    setupEditorButtons();
+  }
+}
+}
+
+function mousePressed() {
+  if (editorMode) {
+    for (let btn of editorButtons) {
+      btn.handleMouse(mouseX, mouseY, true);
+    }
+    // other editor mouse logic I might wanna add frfr
+    return;
+  }
+
 }
 
 function updateEntities() {
@@ -178,7 +191,7 @@ function drawDebugGrid(cameraX, cameraY, zoom) {
     line(sx, 0, sx, height);
   }
 
-  // Draw horizontal grid lines (Y axis, invert for world-to-screen)
+  // Draw horizontal grid lines (Y axis, invert for world to screen)
   for (let y = startY; y <= endY; y += gridSize) {
     let sy = (-y + cameraY) * zoom + height / 2;
     line(0, sy, width, sy);
